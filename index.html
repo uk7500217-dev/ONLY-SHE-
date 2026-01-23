@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Jannah</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --accent: #ff758c;
+            --bg-dark: #0f0c29;
+            --glass: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.2);
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- GLOBAL ANIMATIONS --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .section-fade {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        /* --- 1. ENTRY GATE --- */
+        #gate {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .premium-input {
+            background: var(--glass);
+            border: 2px solid var(--accent);
+            border-radius: 50px;
+            padding: 15px 30px;
+            color: white;
+            font-size: 1.2rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .premium-button {
+            margin-top: 20px;
+            padding: 12px 40px;
+            border-radius: 50px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        .premium-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px var(--accent);
+        }
+
+        /* --- 2. THE HUB (HOME PAGE) --- */
+        #home-hub {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            width: 80%;
+            max-width: 1200px;
+            padding: 40px;
+        }
+
+        .hub-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+            text-decoration: none;
+            color: white;
+            animation: float 4s infinite ease-in-out;
+        }
+
+        .hub-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-15px) scale(1.05);
+        }
+
+        /* --- 3. SECTIONS STYLING --- */
+        section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            box-sizing: border-box;
+            display: none;
+        }
+
+        .active-section {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        /* --- 4. CARTOON CAKE --- */
+        .cake-body {
+            width: 200px;
+            height: 120px;
+            background: #fbb6ce;
+            border-radius: 20px 20px 10px 10px;
+            position: relative;
+            box-shadow: 0 10px 0 #f687b3;
+            margin-top: 50px;
+        }
+
+        .icing {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 40px;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .icing::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            width: 100%;
+            height: 20px;
+            background: radial-gradient(circle, #fff 50%, transparent 51%);
+            background-size: 40px 40px;
+        }
+
+        .candle {
+            width: 10px;
+            height: 40px;
+            background: orange;
+            position: absolute;
+            top: -40px;
+            left: 45%;
+        }
+
+        #letter {
+            display: none;
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 20px;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- SPECIAL HIDDEN SEC --- */
+        #special-content {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="gate">
+        <h1 style="margin-bottom: 20px; font-weight: 300;">For Your Eyes Only</h1>
+        <input type="password" id="entry-pass" class="premium-input" placeholder="Birthday (DDMM)">
+        <button class="premium-button" onclick="unlockSite()">Unlock Heart</button>
+    </div>
+
+    <div id="app" class="hidden" style="display:none;">
+
+        <button class="premium-button back-btn" onclick="showHub()">← Back to Hub</button>
+
+        <div id="home-hub">
+            <h1 style="font-size: 3rem; margin-bottom: 0;">Hola My Jannah</h1>
+            <p style="opacity: 0.7; margin-bottom: 40px;">Choose a path into my thoughts</p>
+            <div class="grid-container">
+                <div class="hub-card" onclick="showSection('for-her')">
+                    <h3>For Her🤍💋❤</h3>
+                    <p>Websites made for you</p>
+                </div>
+                <div class="hub-card" onclick="showSection('presents')">
+                    <h3>Brdy Presents💋</h3>
+                    <p>Edits & Surprises</p>
+                </div>
+                <div class="hub-card" onclick="showSection('cake-sec')">
+                    <h3>Brdy Cake🎂😖</h3>
+                    <p>Make a wish</p>
+                </div>
+                <div class="hub-card" onclick="showSection('love-game')">
+                    <h3>Game of Love🤍</h3>
+                    <p>Let's play</p>
+                </div>
+                <div class="hub-card" onclick="showSection('poetry-sec')">
+                    <h3>Lines for Her❤💋</h3>
+                    <p>My silly words</p>
+                </div>
+                <div class="hub-card" onclick="showSection('special-sec')">
+                    <h3>Special😁</h3>
+                    <p>Comming soon</p>
+                </div>
+            </div>
+        </div>
+
+        <section id="for-her">
+            <h1>Websites For You</h1>
+            <div class="grid-container">
+                <a href="https://uk7500217-dev.github.io/for-jannahhh/no.html" class="hub-card">I JUS LOVE YOU💋</a>
+                <a href="https://uk7500217-dev.github.io/traveling-/" class="hub-card">Whenever you are traveling to
+                    village😁💋</a>
+            </div>
+        </section>
+
+        <section id="presents">
+            <h1>Birthday Presents</h1>
+            <p>Your edits and cinematic moments.</p>
+            <div class="grid-container">
+                <div class="hub-card">
+                    <video width="100%" height="auto" controls poster="thumbnail.jpg" style="border-radius: 15px;">
+                        <source src="she.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>For You</p>
+                </div>
+                <div class="hub-card">
+                    <video width="100%" height="auto" controls poster="thumbnail.jpg" style="border-radius: 15px;">
+                        <source src="her.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>Sec One</p>
+                </div>
+                <a href="https://uk7500217-dev.github.io/her-brdy/" class="premium-button"
+                    style="text-decoration:none;">PRESENT</a>
+            </div>
+        </section>
+
+        <section id="cake-sec">
+            <h1>Cut the Cake</h1>
+            <div class="cake-body" id="cake" onclick="cutCake()">
+                <div class="candle"></div>
+                <div class="icing"></div>
+            </div>
+            <p id="cake-instruction" style="margin-top: 50px;">Click the cake to cut it!</p>
+
+            <div id="letter">
+                <h3>To My Dearest...</h3>
+                <p>Happy Birthday! You are the best thing that ever happened to me. It was the fate that let us meet
+                    each other. Who knows maybe written by him (Allah) hehehe. I LOVE YOU💋🤍...</p>
+            </div>
+        </section>
+
+        <section id="love-game">
+            <h1>The Game of Love</h1>
+            <a href="https://forherrrrrrrrrrrrrrr.netlify.app/?fbclid=PAT01DUAPgfYpleHRuA2FlbQIxMABzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAaekTua4TZw2gJLM9ToRfKVcfyhumZPTuj9YAoq7umjBihaiqmWrVovaQHIdJQ_aem_bOa0LPA52oiuifsaZoU6MA"
+                class="premium-button" style="text-decoration:none; font-size: 1.5rem;">Enter the Game</a>
+        </section>
+
+        <section id="poetry-sec">
+            <h1>Lines for Her</h1>
+            <div class="hub-card" style="width: 80%; max-width: 600px; cursor: default;">
+                <p>"Somewhere in the timeline,
+                    Universe got paused,
+                    It took a deep breath,
+                    Cuz there was someone who was about to come.
+                    Walls were listening.
+                    The floor was all ears.
+                    All of them were praying for a certain person.
+                    Many came to see the moon that was about to rise.
+                    A light gentle enough to heal
+                    Yet powerful enough to outshine the sun.
+                    Heavens leaned closer.
+                    Witnessing the soul that was coming.
+                    The creator of everything (Allah) heard the prayers before they were spoken.
+                    Answered them before they got finished.
+                    A Queen was born, crowned by destiny.
+                    Coming with the blessings.
+                    Her parents heart got honored.
+                    Their patience got rewarded.
+                    Got blessed beyond they can measure.
+                    The Queen got a name by her parents and started being called "ROMAISA"
+                    The name got beauty of its own.
+                    Now imagine the one holding that name.
+
+                    Her beauty is unmeasurable for me as a writer and as viewer I can only say it's heavenly and indeed
+                    it is...
+
+                    HER EYES are beautiful like the moon of 14th containg hope and full of charm.
+                    The dazzling charm from her eyes is as glowing that stars always dwindle in thier Presence.
+                    It's the eyes that can kill most of the humans just by a glance.
+                    Her is is as white as the pure milk containing the brown citrine in it.
+                    Whenever I see her eyes I feel like it's the most beautiful thing created by the the one and only
+                    God.
+                    My words gets dim in front of her eyes that's how pretty/lovely they are.
+
+                    HER LIPS I'm so confused how should I even describe.
+                    They are the lips that feels like coming straight out from a fairytale.
+                    Whenever she laughs they looks so pure that I want to touch them not because of obsession but
+                    because it feels like the thing that's descended from heaven.
+                    They looks so adorable that I want to die by kissing them and making myself breathless.
+                    They are as soft as the snow on the peakest mountain yet calm.
+                    The joy of the youth that comes from them makes my day lively.
+                    I can see them from the rest of my life without even seeing them.
+
+                    HER CHEEKS are as soft as the talc.
+                    Her cheeks feels like the cotton,sometimes like the fur of a cat.
+                    The dimple around her cheeks whenever she smiles always had me dying.
+                    The more I describe her cheeks the more I started blushing that's how cute they are.
+                    The thought of touching her pure cheeks with my dirty hands can't be described with my ungrateful
+                    words.
+
+                    HER HANDS are not the part that belongs to one person.
+                    They contains beauty that is otherworldly far beyond our imagination.
+                    They are of pure white as much that the white colour feels like black in front of them.
+                    They are the hands that I'll never leave behind even after dying.
+                    I'll hold them in the afterlife,so she doesn't feel lonely.
+                    I'll kiss them, treasure them, touch them, put them on my cheeks whenever I wanna feel relieved, pat
+                    my head with them, cherish them and adore them for the eternity.
+
+                    HER FEET as beautiful as the color of love.
+                    Whenever he walks the soil beneath her feet got purified. The sound of her feet hitting the ground
+                    makes the heart flutters. Seeing her feet and u will want to touch them once before dying.
+                    But the moment you gonna thought of touching them u'll gonna find yourself in a doubt. The type of
+                    doubt only pure can understand...
+
+                    Today is not just a date.
+
+                    Today is the day that arrived with barakah,
+                    the day written with mercy,
+                    the day beauty was entrusted to the earth.
+
+
+                    January -6-2026
+
+
+                    The birthday of the princess that's crowned with blessings.
+                    The birthday of my love.
+                    The birthday of the one whom I can sacrifice my life for.
+                    The one that I will hold dear in every moment of my life.
+                    The one I will choose at the day of judgement too.
+
+
+                    Your birthday is not a reminder of age,
+                    it’s a reminder of impact.
+                    Of how many hearts breathe easier
+                    because you are here.
+                    The moon rose softer on the day you were born.
+                    You came into this world without noise,
+                    yet everything changed.
+                    Today, I don’t wish you riches or perfection.
+                    I wish you peace that stays.
+                    The kind that follows you even in silence.
+                    I wish your heart always feels understood,
+                    even on days you don’t explain yourself.
+                    May life treat you with the tenderness
+                    you give to the world without realizing.
+                    May your smile never feel like effort,
+                    and your tears never feel lonely.
+                    You deserve a happiness
+                    that doesn’t rush,
+                    doesn’t fade,
+                    and doesn’t ask for reasons.
+                    On your birthday,
+                    I hope the universe returns
+                    even half of the love
+                    you quietly give.
+                    I hope the world will feel the kindness
+                    you're spreading quietly.
+                    I wish u will always smile no matter the situation.
+                    Your smile will become the power of your loved ones.
+                    May Allah gives u the things u deserve
+                    May Allah makes u the reason for your parents to go in Jannah.
+
+                    And lastly I'm not a man with a great honor and pride nor I am as perfect as u are I'm not a man
+                    with a great past.
+                    I'm what I'm. Nothing just a low soul that likes to ask your hand from Allah in his every prayer.
+                    Whenever I hold hands high in air the very first thought that comes in my mind is yours.
+                    U are the reason my Salah is much better and so guud.
+                    I was good for nothing before but u polished me into a fine man.
+                    I got close to the Allah indeed he's close to everyone's heart but I started enjoying it holding
+                    hands in air in front of him and the person who made it happened was non other than u my love so
+                    these hands are always gonna say your name whenever they gonna held high.
+
+                    And some lines for you my love I hope u will gonna like them...
+
+                    I didn’t fall for you instantly,
+                    I drowned into you slowly.
+                    One thought at a time,
+                    one heartbeat closer to yours.
+                    You entered in my life like a quiet prayer,
+                    And I got answered before I even asked.
+                    Now my soul recognizes your presence,
+                    before my eyes do.
+                    Loving you feels ancient,
+                    like my heart knew you before this life.
+                    Maybe you were the one,
+                    That always likes to come in my dreams.
+                    As if we were written,
+                    long before we met.
+                    Your name lives softly on my tongue,
+                    like a secret meant only for me.
+                    Every time I think of you,
+                    my heart lowers its guard.
+                    You don’t just make me smile,
+                    you make me feel safe enough to feel the moment.
+                    In your existence,
+                    I find rest.
+                    I love the way you stay in my thoughts,
+                    without asking for space.
+                    Even silence brings you to me,
+                    gently, lovingly.
+                    Your eyes hold a depth,
+                    I could drown in willingly.
+                    Not to escape the life,
+                    but to understand it better.
+                    When you speak,
+                    my heart listens first.
+                    When you’re quiet,
+                    my soul listens harder.
+                    Loving you is not chaos,
+                    it is calm with intensity.
+                    A fire that doesn’t burn,
+                    but warms everything it touches.
+                    You make my flaws feel forgiven,
+                    without ever mentioning them.
+                    Doesn't matter how much I will say thanks,
+                    It's never enough the things u have done for me.
+                    You look at me like I’m enough,
+                    and somehow—I become it.
+                    I crave you in the softest way,
+                    not possession, but obsession.
+                    To sit beside you,
+                    and feel complete.
+                    If hearts had fingerprints around it,
+                    Yours will be around mine.
+                    Every beat carries you,
+                    without permission.
+                    I love you beyond words,
+                    where languages comes to an end.
+                    Where feelings exist,
+                    raw and unfiltered.
+                    You are my favorite vulnerability,
+                    the risk I’d choose every time.
+                    With you, love isn’t fear,
+                    it’s trust.
+                    Even distance bows to what I feel,
+                    even time steps aside.
+                    Because my heart doesn’t measure the love u carries,
+                    it recognizes the moment u say it.
+                    The saying that's as pretty as u the moment u said "I LOVE YOU".
+                    I want you in my quiet moments,
+                    not just my celebrations.
+                    In my tired evenings,
+                    and my hopeful mornings.
+                    Loving you feels like returning,
+                    not chasing.
+                    Like my soul exhaling,
+                    after a long journey.
+                    I don’t want forever loudly,
+                    I want it sincerely.
+                    One day at a time,
+                    hand in heart.
+                    If love is a language,
+                    you are my fluency.
+                    I don’t struggle to feel you,
+                    I exist in it.
+                    You are my soft thought at night,
+                    the warmth in my chest.
+                    Even when the world is heavy,
+                    you make me light.
+                    I choose you in small ways,
+                    every single day.
+                    In patience, in loyalty,
+                    in silence.
+                    My love for you is not loud,
+                    but it is endless.
+                    It grows in depth,
+                    not display.
+                    If I ever lose words,
+                    my heart will still speak your name.
+                    Because you are not just someone I love,
+                    you are someone I belong to.
+                    You are written into my prayers,
+                    my pauses, my hopes.
+                    I don’t need the world to witness this,
+                    my soul already knows.
+                    This love is gentle,
+                    deep, and true.
+                    And if love has a destination,
+                    it is you.
+                    And there's a thing I wanna say so badly,
+                    The word that got created jus for you
+                    And the word is that "I LOVE YOU".
+
+                    ______________________________________
+                    Happy birthday my Jannah 💋💋💋💋my wife 💋💋💋💋💋 my hayati 💋💋💋💋💋my soul💋💋💋💋💋💋💋 my
+                    love💋💋💋💋 my heart💋💋💋💋 my mind 💋💋💋💋my blood 💋💋💋💋💋my angle 💋💋💋💋💋my lil princess
+                    💋💋💋💋my lil queen 💋💋💋💋💋my Chichi 💋💋💋💋my lil child 💋💋💋💋my honey💋💋💋💋💋 my darling
+                    💋💋💋💋my cutieee piee 💋💋💋💋💋💋my darling💋💋💋💋💋💋 my Jan 💋💋my sky 💋💋💋💋💋my
+                    moon💋💋💋💋💋 my stars 💋💋💋💋my dreams💋💋💋💋 my comfort 💋💋💋💋 my peace💋💋💋💋my seven
+                    skies💋💋💋 you're my everything my love ❤️🤍 💋💋💋💋💋💋💋💋💋
+
+                    ______________________________________
+                    کلیزه مو مبارک شه زما جنت 💋💋💋💋💋 زما میرمن 💋💋💋💋💋 زما حیاتی 💋💋💋💋💋💋 زما روح💋💋💋💋💋💋
+                    زما مینه💋💋💋💋💋 زما زړه💋💋💋💋 زما ذهن 💋💋💋💋💋💋💋 زما وینه 💋💋💋💋💋 زما زاویه 💋💋💋💋💋
+                    زما کوچنۍ شهزادګۍ 💋💋💋💋💋 زما کوچنۍ ملکه 💋💋💋💋💋 زما چیچي 💋💋💋💋 زما کوچنی ماشوم 💋💋💋💋💋
+                    زما ګرانه 💋💋💋💋💋 زما ښکلې پیا 💋💋💋💋💋💋💋💋 زما ګرانه💋💋💋💋💋💋 زما جنوري 💋💋 زما اسمان
+                    💋💋💋💋💋💋💋 زما سپوږمۍ💋💋💋💋💋 زما ستوري 💋💋💋💋💋 زما خوبونه💋💋💋💋 زما آرام💋💋💋💋 زما
+                    سوله💋💋💋💋 زما اووه اسمانونه💋💋💋💋💋💋_____________________________________
+
+                    ذا تا ساړا مېنا کوم🤍💋🫶🏻
+                    میری جان یہ جان آپ پر قربان آپ سے انگنت محبت ہے❤️💋🫶🏻
+                    أحبك.🤍🫶🏻💋🥺
+                    I love you🤍❤️💋
+                    Te quiero.❤️🫶🏻💋
+                    사랑해.🤍🫶🏻💋
+                    Ti amo.❤️🫶🏻💋
+                    我爱你.🤍🫶🏻💋
+                    Je t'aime.❤️🫶🏻💋
+                    Я тебе кохаю.❤️🫶🏻💋
+                    Seni seviyorum.🤍🫶🏻💋
+                    Ik hou van je.❤️🫶🏻💋
+                    Ich liebe dich.🤍🫶🏻💋
+                    愛してる。❤️🫶🏻💋
+                    Я люблю тебя.🤍🫶🏻💋
+                    ______________________________________
+
+
+
+                    JANNAHHHHH once again :
+
+                    HAPPY BIRTHDAY TO YOU MY LOVE.
+
+
+
+                    Short msg for you JANAN:
+                    I'm not good in English too so I hope u will understand my words the way I said them 😹 uk meh your
+                    silly baby na😹💋I can't do much but I do promise one thing when I will meet with you I'm gonna come
+                    Peshawar I will give you the gifts I have thought of 💋💋💋💋💋 mmm I really wish I was born in
+                    Peshawar but Allah plans 😹💋💋💋💋💋💋 forgive me if I did anything wrong I have made u cry so many
+                    times and at times like this I feel nothing jus ashamed disappointed in my self but u always console
+                    me every single time thank u for always being here for me thank u for everything u have done thank u
+                    for everything u will done in near future too.
+
+                    And sorry for every single mistake I have ever done I'm saying sorry from the bottom of my heart so
+                    I appreciate if u will accept it I will feel honored my love.
+
+                    I jus uk I jus love you insanely like crazily, madly 😹💋💋💋💋💋💋
+                    Jus want to say it all my love I'm like an open book to you now 💋💋💋💋💋💋"</p>
+                <hr style="border: 0.5px solid var(--border); margin: 20px 0;">
+                <p>"In every code I write, I hide your name..."</p>
+            </div>
+        </section>
+
+        <section id="special-sec">
+            <h1>The Special Vault</h1>
+            <div id="special-lock">
+                <input type="password" id="special-pass" class="premium-input" placeholder="Enter Secret Password">
+                <button class="premium-button" onclick="unlockSpecial()">Unlock Special</button>
+            </div>
+            <div id="special-content">
+                <div class="hub-card">
+                    <h2>My Final Message</h2>
+                    <p>Put your deep emotional message here. This is the heart of the website.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // 1. SITE UNLOCK LOGIC
+        function unlockSite() {
+            const pass = document.getElementById('entry-pass').value;
+            if (pass === "6108") { // <--- CHANGE THIS TO HER BIRTHDAY
+                document.getElementById('gate').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+            } else { alert("Not today, stranger!"); }
+        }
+
+        // 2. NAVIGATION LOGIC
+        function showSection(id) {
+            document.getElementById('home-hub').style.display = 'none';
+            const secs = document.querySelectorAll('section');
+            secs.forEach(s => s.classList.remove('active-section'));
+            const target = document.getElementById(id);
+            target.classList.add('active-section');
+            target.classList.add('section-fade');
+        }
+
+        function showHub() {
+            const secs = document.querySelectorAll('section');
+            secs.forEach(s => s.classList.remove('active-section'));
+            document.getElementById('home-hub').style.display = 'flex';
+        }
+
+        // 3. CAKE LOGIC
+        function cutCake() {
+            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+            document.getElementById('cake').style.transform = "translateX(100px) rotate(10deg)";
+            document.getElementById('cake').style.opacity = "0";
+            document.getElementById('cake-instruction').style.display = 'none';
+            setTimeout(() => {
+                document.getElementById('letter').style.display = 'block';
+            }, 500);
+        }
+
+        // 4. SPECIAL VAULT LOGIC
+        function unlockSpecial() {
+            const pass = document.getElementById('special-pass').value;
+            if (pass === "ubaidxrumi") {
+                document.getElementById('special-lock').style.display = 'none';
+                document.getElementById('special-content').style.display = 'block';
+                confetti({ colors: ['#ff0000', '#ffffff'] });
+            } else { alert("Access Denied."); }
+        }
+    </script>
+</body>
+
+</html>
