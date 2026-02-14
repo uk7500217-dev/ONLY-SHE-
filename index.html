@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --accent: #ff758c;
+            --accent: rgb(184, 165, 60);
             --bg-dark: #0f0c29;
             --glass: rgba(255, 255, 255, 0.1);
             --border: rgba(255, 255, 255, 0.2);
@@ -19,7 +19,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background: linear-gradient(135deg, #000000, #3f0404, #ff0000);
             color: white;
             overflow-x: hidden;
             scroll-behavior: smooth;
@@ -93,6 +93,40 @@
             box-shadow: 0 0 15px var(--accent);
         }
 
+        #bouquet-container {
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .bouquet-icon {
+            font-size: 100px;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+        }
+
+        .bouquet-icon:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .bloom-text {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .bloom-text span {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        /* Smooth fade out class */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.8s ease-out;
+        }
+
         .premium-button:hover {
             transform: scale(1.1);
             box-shadow: 0 0 25px var(--accent);
@@ -114,6 +148,39 @@
             width: 80%;
             max-width: 1200px;
             padding: 40px;
+        }
+
+        .hub-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .vault-link {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+            text-align: center;
+            display: block;
+            /* Makes the whole row clickable */
+        }
+
+        .vault-link:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .finale-link {
+            border: 2px solid gold;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
         }
 
         .hub-card {
@@ -254,7 +321,7 @@
                 </div>
                 <div class="hub-card" onclick="showSection('special-sec')">
                     <h3>Special😁</h3>
-                    <p>Comming soon</p>
+                    <p>Time comes</p>
                 </div>
             </div>
         </div>
@@ -607,8 +674,59 @@
                 <p>"In every code I write, I hide your name..."</p>
             </div>
         </section>
-
         <section id="special-sec">
+            <h1>The Special Vault</h1>
+
+            <div id="special-lock">
+                <input type="password" id="special-pass" class="premium-input" placeholder="Enter Secret Password">
+                <button class="premium-button" onclick="unlockSpecial()">Unlock Special</button>
+            </div>
+
+            <div id="bouquet-container" style="display: none; text-align: center; cursor: pointer;"
+                onclick="bloomVault()">
+                <div class="bouquet-icon">💐</div>
+                <p class="bloom-text">A bouquet for my Jannah...<br><span>(Click to open)</span></p>
+            </div>
+
+            <div id="special-content">
+                <div class="hub-list-container">
+                    <a href="https://uk7500217-dev.github.io/rose/" class="vault-link">Happy Rose Day 🌹</a>
+                    <a href="https://uk7500217-dev.github.io/propose-day/" class="vault-link">Happy Propose Day 😖</a>
+                    <a href="https://uk7500217-dev.github.io/chocolate-day/" class="vault-link">Happy Chocolate Day
+                        🍫</a>
+                    <a href="https://uk7500217-dev.github.io/teddy-day/" class="vault-link">Happy Teddy Day 🧸</a>
+                    <a href="https://uk7500217-dev.github.io/promise-day/" class="vault-link">Happy Promise Day 💍</a>
+                    <a href="https://uk7500217-dev.github.io/hug-day/" class="vault-link">Happy Hug Day 🤗</a>
+                    <a href="https://uk7500217-dev.github.io/kiss-day/" class="vault-link">Happy Kiss Day 💋</a>
+                    <a href="https://uk7500217-dev.github.io/valentines-day/" class="vault-link finale-link">Happy
+                        VALENTINES Day ❤️</a>
+                </div>
+            </div>
+        </section>
+        <!-- <section id="special-sec">
+            <h1>The Special Vault</h1>
+
+            <div id="special-lock">
+                <input type="password" id="special-pass" class="premium-input" placeholder="Enter Secret Password">
+                <button class="premium-button" onclick="unlockSpecial()">Unlock Special</button>
+            </div>
+
+            <div id="special-content">
+                <div class="hub-list-container">
+                    <a href="https://uk7500217-dev.github.io/rose/" class="vault-link">Happy Rose Day 🌹</a>
+                    <a href="https://uk7500217-dev.github.io/propose-day/" class="vault-link">Happy Propose Day 😖</a>
+                    <a href="https://uk7500217-dev.github.io/chocolate-day/" class="vault-link">Happy Chocolate Day
+                        🍫</a>
+                    <a href="https://uk7500217-dev.github.io/teddy-day/" class="vault-link">Happy Teddy Day 🧸</a>
+                    <a href="https://uk7500217-dev.github.io/promise-day/" class="vault-link">Happy Promise Day 💍</a>
+                    <a href="https://uk7500217-dev.github.io/hug-day/" class="vault-link">Happy Hug Day 🤗</a>
+                    <a href="https://uk7500217-dev.github.io/kiss-day/" class="vault-link">Happy Kiss Day 💋</a>
+                    <a href="https://uk7500217-dev.github.io/valentines-day/" class="vault-link finale-link">Happy
+                        VALENTINES Day ❤️</a>
+                </div>
+            </div>
+        </section> -->
+        <!-- <section id="special-sec">
             <h1>The Special Vault</h1>
             <div id="special-lock">
                 <input type="password" id="special-pass" class="premium-input" placeholder="Enter Secret Password">
@@ -616,61 +734,146 @@
             </div>
             <div id="special-content">
                 <div class="hub-card">
-                    <h2>My Final Message</h2>
-                    <p>Put your deep emotional message here. This is the heart of the website.</p>
-                </div>
+                    <hr><a href="https://uk7500217-dev.github.io/rose/" class="hub-card">Happy Rose Day 🌹</a>
+                    <hr><a href="https://uk7500217-dev.github.io/propose-day/" class="hub-card">Happy Propose Day 😖</a>
+                    <hr><a href="https://uk7500217-dev.github.io/chocolate-day/" class="hub-card">Happy Chocolate Day 😖</a>
+                    <hr><a href="https://uk7500217-dev.github.io/teddy-day/" class="hub-card">Happy Teddy Day 😖</a>
+                    <hr><a href="https://uk7500217-dev.github.io/promise-day/" class="hub-card">Happy Promise Day 😖</a>
+                    <hr><a href="https://uk7500217-dev.github.io/hug-day/" class="hub-card">Happy Hug Day 😖</a>
+                    <hr><a href="https://uk7500217-dev.github.io/kiss-day/" class="hub-card">Happy Kiss Day 😖</a>
+                </div><a href="https://uk7500217-dev.github.io/valentines-day/" class="hub-card">Happy VALENTINES Day
+                    😖</a>
             </div>
         </section>
 
-    </div>
+    </div> -->
 
-    <script>
-        // 1. SITE UNLOCK LOGIC
-        function unlockSite() {
-            const pass = document.getElementById('entry-pass').value;
-            if (pass === "6108") { // <--- CHANGE THIS TO HER BIRTHDAY
-                document.getElementById('gate').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-            } else { alert("Not today, stranger!"); }
-        }
+        <script>
+            // 1. SITE UNLOCK LOGIC
+            function unlockSite() {
+                const pass = document.getElementById('entry-pass').value;
+                if (pass === "6108") { // <--- CHANGE THIS TO HER BIRTHDAY
+                    document.getElementById('gate').style.display = 'none';
+                    document.getElementById('app').style.display = 'block';
+                } else { alert("Not today, stranger!"); }
+            }
 
-        // 2. NAVIGATION LOGIC
-        function showSection(id) {
-            document.getElementById('home-hub').style.display = 'none';
-            const secs = document.querySelectorAll('section');
-            secs.forEach(s => s.classList.remove('active-section'));
-            const target = document.getElementById(id);
-            target.classList.add('active-section');
-            target.classList.add('section-fade');
-        }
+            // 2. NAVIGATION LOGIC
+            function showSection(id) {
+                document.getElementById('home-hub').style.display = 'none';
+                const secs = document.querySelectorAll('section');
+                secs.forEach(s => s.classList.remove('active-section'));
+                const target = document.getElementById(id);
+                target.classList.add('active-section');
+                target.classList.add('section-fade');
+            }
 
-        function showHub() {
-            const secs = document.querySelectorAll('section');
-            secs.forEach(s => s.classList.remove('active-section'));
-            document.getElementById('home-hub').style.display = 'flex';
-        }
+            function showHub() {
+                const secs = document.querySelectorAll('section');
+                secs.forEach(s => s.classList.remove('active-section'));
+                document.getElementById('home-hub').style.display = 'flex';
+            }
 
-        // 3. CAKE LOGIC
-        function cutCake() {
-            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
-            document.getElementById('cake').style.transform = "translateX(100px) rotate(10deg)";
-            document.getElementById('cake').style.opacity = "0";
-            document.getElementById('cake-instruction').style.display = 'none';
-            setTimeout(() => {
-                document.getElementById('letter').style.display = 'block';
-            }, 500);
-        }
+            // 3. CAKE LOGIC
+            function cutCake() {
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+                document.getElementById('cake').style.transform = "translateX(100px) rotate(10deg)";
+                document.getElementById('cake').style.opacity = "0";
+                document.getElementById('cake-instruction').style.display = 'none';
+                setTimeout(() => {
+                    document.getElementById('letter').style.display = 'block';
+                }, 500);
+            }
 
-        // 4. SPECIAL VAULT LOGIC
-        function unlockSpecial() {
-            const pass = document.getElementById('special-pass').value;
-            if (pass === "ubaidxrumi") {
-                document.getElementById('special-lock').style.display = 'none';
-                document.getElementById('special-content').style.display = 'block';
-                confetti({ colors: ['#ff0000', '#ffffff'] });
-            } else { alert("Access Denied."); }
-        }
-    </script>
+            function unlockSpecial() {
+                const pass = document.getElementById('special-pass').value;
+                if (pass === "ubaidxrumi") {
+                    document.getElementById('special-lock').style.display = 'none';
+                    document.getElementById('special-content').style.display = 'block';
+
+                    // THE LONG PACED CONFETTI EXPLOSION
+                    const end = Date.now() + (15 * 1000);
+                    const colors = ['#ff758c', '#ffffff', '#ff0000'];
+
+                    (function frame() {
+                        confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+                        confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+                        if (Date.now() < end) { requestAnimationFrame(frame); }
+                    }());
+                } else {
+                    alert("Access Denied.");
+                }
+
+            }
+            function unlockSpecial() {
+                const pass = document.getElementById('special-pass').value;
+                if (pass === "ubaidxrumi") {
+                    const lock = document.getElementById('special-lock');
+
+                    // 1. Fade out the lock
+                    lock.classList.add('fade-out');
+
+                    setTimeout(() => {
+                        lock.style.display = 'none';
+                        // 2. Show the bouquet
+                        const bouquet = document.getElementById('bouquet-container');
+                        bouquet.style.display = 'block';
+                    }, 800);
+
+                } else {
+                    alert("Access Denied.");
+                }
+            }
+
+            function bloomVault() {
+                const bouquet = document.getElementById('bouquet-container');
+                const content = document.getElementById('special-content');
+
+                // 3. Explosion of Confetti!
+                const end = Date.now() + (3 * 1000); // 3-second burst
+                const colors = ['#ff758c', '#ffffff', '#ff0000', '#ffd700'];
+
+                (function frame() {
+                    confetti({
+                        particleCount: 7,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: colors
+                    });
+                    confetti({
+                        particleCount: 7,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: colors
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+
+                // 4. Fade out bouquet and show links
+                bouquet.classList.add('fade-out');
+
+                setTimeout(() => {
+                    bouquet.style.display = 'none';
+                    content.style.display = 'block';
+                    content.classList.add('section-fade'); // Your existing fade animation
+                }, 800);
+            }
+
+            // // 4. SPECIAL VAULT LOGIC
+            // function unlockSpecial() {
+            //     const pass = document.getElementById('special-pass').value;
+            //     if (pass === "ubaidxrumi") {
+            //         document.getElementById('special-lock').style.display = 'none';
+            //         document.getElementById('special-content').style.display = 'block';
+            //         confetti({ colors: ['#ff0000', '#ffffff'] });
+            //     } else { alert("Access Denied."); }
+            // }
+        </script>
 </body>
 
 </html>
